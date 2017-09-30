@@ -7,7 +7,7 @@ output: html_document
 
 ## Usage:
 
-     read.table("tidy_dataset.txt")
+     read.table("tidy_dataset.txt", skip=1) (first line contains column names)
      
      data set found at https://github.com/phjrdla/datasciencecoursera/blob/master/tidy_dataset.txt
      
