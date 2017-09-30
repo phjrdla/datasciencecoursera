@@ -74,24 +74,30 @@ merged_test <- join_all(list(subject_test[,],X_test[,],Y_test[,]), by='ID')
 ## free memory
 rm(subject_test,X_test,Y_test)
 
-## Merges the training and the test sets to create one data set. (append merged_test to merged_train)
+## 1 , Merges the training and the test sets to create one data set. (append merged_test to merged_train)
 merged_data<- rbind(merged_train, merged_test)
 ## free memory
 rm(merged_train, merged_test)
 
-## Step 4 : Extracts only the measurements on the mean and standard deviation for each measurement
+## 2 . Extracts only the measurements on the mean and standard deviation for each measurement
 ## find positions for labels PersonID, ExerciseID or containing mean or std
 cols2select <- grepl('(PersonID|ExerciseID|mean|std)', names(merged_data))
 meanstd_data <- merged_data[, cols2select]
 
-## Uses descriptive activity names to name the activities in the data set
+## 3 . Uses descriptive activity names to name the activities in the data set
 meanstd_data_with_label <- join(meanstd_data, activity_labels, by="ExerciseID")
 ## free memory
 rm(meanstd_data)
 
-## From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-tidy_dataset <- meanstd_data_with_label %>% group_by(ExerciseID,PersonID) %>% summarize_if(is.numeric,mean)
+## 4 . Appropriately labels the data set with descriptive variable names
+## Amend some variable names
+names(meanstd_data_with_label)<-gsub("\\(\\)", "", names(meanstd_data_with_label))
+names(meanstd_data_with_label)<-gsub("^t", "Time", names(meanstd_data_with_label))
+names(meanstd_data_with_label)<-gsub("^f", "Freq", names(meanstd_data_with_label))
+names(meanstd_data_with_label)<-gsub("BodyBody", "Body", names(meanstd_data_with_label))
 
+## 5 . From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+tidy_dataset <- meanstd_data_with_label %>% group_by(ExerciseID,PersonID) %>% summarize_if(is.numeric,mean)
 write.table(tidy_dataset, file='tidy_dataset.csv',  row.names = FALSE)
 
 
