@@ -90,8 +90,8 @@ meanstd_data_with_label <- join(meanstd_data, activity_labels, by="ExerciseID")
 rm(meanstd_data)
 
 ## From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-grouped_by_data <- meanstd_data_with_label %>% group_by(ExerciseID,PersonID) %>% summarize_if(is.numeric,mean)
+tidy_dataset <- meanstd_data_with_label %>% group_by(ExerciseID,PersonID) %>% summarize_if(is.numeric,mean)
 
-write.table(grouped_by_data, file='tidy_dataset.csv', sep=',', row.names = FALSE)
+write.table(tidy_dataset, file='tidy_dataset.csv',  row.names = FALSE)
 
 
